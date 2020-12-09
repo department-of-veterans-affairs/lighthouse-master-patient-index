@@ -12,5 +12,6 @@
   <packaging>pom</packaging>
   <modules>
     <module>master-patient-index-model</module>
+    <module>master-patient-index-client</module>
   </modules>
 </project>
