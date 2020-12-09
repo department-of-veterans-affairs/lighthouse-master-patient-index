@@ -2,4 +2,4 @@
 
 Library to facilitate interfacing with MPI SOAP Services.
 
-* master-patient-index-artifacts - generates java objects from IdMHL7v3.wsdl
+* master-patient-index-model - generates java objects from IdMHL7v3.wsdl
