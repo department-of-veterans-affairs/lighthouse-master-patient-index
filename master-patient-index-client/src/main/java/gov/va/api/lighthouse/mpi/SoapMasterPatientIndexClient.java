@@ -32,6 +32,13 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
   private SoapMasterPatientIndexClient(MpiConfig config) {
     this.config = config;
     this.sslContext = createSslContext();
+    /*
+     * Temporary, this should be replaced with configuration that alters the SSL socket factory per
+     * port. The truststore and keystore should also be re-used. However, to move forward with
+     * integration testing, this is deferred.
+     * Today is Dec 11, 2020.
+     */
+    javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
   }
 
   public static SoapMasterPatientIndexClient of(MpiConfig config) {
