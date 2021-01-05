@@ -308,7 +308,7 @@ public class Mpi1305Creator {
                 .id(
                     List.of(
                         II.iIBuilder()
-                            .extension(config.getClientExtension())
+                            .extension(config.getIntegrationProcessId())
                             .root("2.16.840.1.113883.3.933")
                             .build()))
                 .asAgent(asAgent())

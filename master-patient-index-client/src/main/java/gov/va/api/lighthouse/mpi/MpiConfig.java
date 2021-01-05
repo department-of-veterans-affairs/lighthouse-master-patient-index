@@ -28,5 +28,4 @@ public class MpiConfig {
   String userId;
   String integrationProcessId; // e.g. 200DVPE
   String asAgentId; // e.g. 200DVPG
-  String clientExtension;
 }
