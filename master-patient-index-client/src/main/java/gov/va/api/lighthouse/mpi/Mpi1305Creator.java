@@ -4,7 +4,6 @@ import static gov.va.api.lighthouse.mpi.Creators.ceWithCode;
 import static gov.va.api.lighthouse.mpi.Creators.csWithCode;
 import static gov.va.api.lighthouse.mpi.Creators.stWithContent;
 import static gov.va.api.lighthouse.mpi.Creators.telWithValue;
-import static java.lang.String.valueOf;
 import static java.util.Collections.singletonList;
 
 import io.micrometer.core.instrument.util.StringUtils;
@@ -52,9 +51,7 @@ import org.hl7.v3.XActMoodIntentEvent;
 @Builder
 public class Mpi1305Creator {
   @Builder.Default String initialQuantity = "10";
-
   @Builder.Default String responseElementGroupIdExtension = "PV";
-
   @Builder.Default boolean retrieveRelationships = true;
 
   MpiConfig config;
@@ -113,7 +110,7 @@ public class Mpi1305Creator {
 
   private List<IVLTS> birthTime() {
     IVLTS birthTime = IVLTS.iVLTSBuilder().build();
-    birthTime.setValue(attributes.birthTime);
+    birthTime.setValue(attributes.getBirthTime());
     return singletonList(birthTime);
   }
 
@@ -202,16 +199,25 @@ public class Mpi1305Creator {
     List<Serializable> nameList = new ArrayList<>();
     nameList.add(
         new JAXBElement<>(
-            new QName("urn:hl7-org:v3", "given"), String.class, EN.class, attributes.firstName));
+            new QName("urn:hl7-org:v3", "given"),
+            String.class,
+            EN.class,
+            attributes.getFirstName()));
     // Only add second 'given' if it has a value
-    if (StringUtils.isNotBlank(attributes.middleName)) {
+    if (StringUtils.isNotBlank(attributes.getMiddleName())) {
       nameList.add(
           new JAXBElement<>(
-              new QName("urn:hl7-org:v3", "given"), String.class, EN.class, attributes.middleName));
+              new QName("urn:hl7-org:v3", "given"),
+              String.class,
+              EN.class,
+              attributes.getMiddleName()));
     }
     nameList.add(
         new JAXBElement<>(
-            new QName("urn:hl7-org:v3", "family"), String.class, EN.class, attributes.lastName));
+            new QName("urn:hl7-org:v3", "family"),
+            String.class,
+            EN.class,
+            attributes.getLastName()));
     return nameList;
   }
 
@@ -226,7 +232,7 @@ public class Mpi1305Creator {
                       singletonList(
                           II.iIBuilder()
                               .root("2.16.840.1.113883.4.1")
-                              .extension(attributes.ssn)
+                              .extension(attributes.getSsn())
                               .build()))
                   .semanticsText(stWithContent("SSN"))
                   .build()));
@@ -243,11 +249,11 @@ public class Mpi1305Creator {
                       singletonList(
                           EN.eNBuilder().use(singletonList("L")).content(nameList()).build()))
                   .build()));
-      if (StringUtils.isNotBlank(attributes.middleName)) {
+      if (StringUtils.isNotBlank(attributes.getGender())) {
         paramBuilder.livingSubjectAdministrativeGender(
             singletonList(
                 PRPAMT201306UV02LivingSubjectAdministrativeGender.builder()
-                    .value(singletonList(ceWithCode(attributes.gender)))
+                    .value(singletonList(ceWithCode(attributes.getGender())))
                     .semanticsText(stWithContent("LivingSubject.administrativeGender"))
                     .build()));
       }
