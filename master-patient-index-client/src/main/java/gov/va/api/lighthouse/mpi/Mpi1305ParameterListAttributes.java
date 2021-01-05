@@ -1,16 +1,12 @@
 package gov.va.api.lighthouse.mpi;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.NonNull;
+import lombok.Value;
 import lombok.experimental.Accessors;
 
-@Data
-@NoArgsConstructor
+@Value
 @Builder
-@AllArgsConstructor
 @Accessors(fluent = false)
 public class Mpi1305ParameterListAttributes {
 

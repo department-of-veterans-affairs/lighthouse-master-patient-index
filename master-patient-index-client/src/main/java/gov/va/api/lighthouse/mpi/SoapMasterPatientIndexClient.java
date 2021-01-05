@@ -124,9 +124,9 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
   @Override
   @SneakyThrows
   public PRPAIN201306UV02 request1305ByAttributes(Mpi1305ParameterListAttributes attributes) {
-    PRPAIN201305UV02 mvi1309RequestBody =
+    PRPAIN201305UV02 mvi1305RequestBody =
         Mpi1305Creator.builder().config(config).attributes(attributes).build().asSoapRequest();
-    return port().prpaIN201305UV02(mvi1309RequestBody);
+    return port().prpaIN201305UV02(mvi1305RequestBody);
   }
 
   /** Make a 1309 request. */

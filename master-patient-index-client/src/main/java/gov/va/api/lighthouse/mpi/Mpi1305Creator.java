@@ -53,6 +53,8 @@ public class Mpi1305Creator {
   @Builder.Default String initialQuantity = "10";
   @Builder.Default String responseElementGroupIdExtension = "PV";
   @Builder.Default boolean retrieveRelationships = true;
+  @Builder.Default String processingCode = "T";
+  @Builder.Default String processingModeCode = "T";
 
   MpiConfig config;
 
@@ -75,7 +77,7 @@ public class Mpi1305Creator {
                             List.of(
                                 II.iIBuilder()
                                     .root("2.16.840.1.113883.4.349")
-                                    .extension(config.getSenderIdExtension())
+                                    .extension(config.getAsAgentId())
                                     .build()))
                         .build()))
             .build());
@@ -88,8 +90,8 @@ public class Mpi1305Creator {
     message.setVersionCode(csWithCode("4.0"));
     message.setInteractionId(
         II.iIBuilder().root("2.16.840.1.113883.1.6").extension("PRPA_IN201305UV02").build());
-    message.setProcessingCode(csWithCode(config.getProcessingCode()));
-    message.setProcessingModeCode(csWithCode(config.getProcessingCode()));
+    message.setProcessingCode(csWithCode(processingCode()));
+    message.setProcessingModeCode(csWithCode(processingCode()));
     message.setAcceptAckCode(csWithCode("AL"));
     message.getReceiver().add(receiver());
     message.setSender(sender());
@@ -132,7 +134,7 @@ public class Mpi1305Creator {
                         List.of(
                             II.iIBuilder()
                                 .root("2.16.840.1.113883.4.349")
-                                .extension(config.getDataEntererExtension())
+                                .extension(config.getAsAgentId())
                                 .build()))
                     .assignedPerson(
                         new JAXBElement<>(
