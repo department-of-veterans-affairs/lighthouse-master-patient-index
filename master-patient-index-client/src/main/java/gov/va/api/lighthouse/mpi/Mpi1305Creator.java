@@ -112,7 +112,7 @@ public class Mpi1305Creator {
 
   private List<IVLTS> birthTime() {
     IVLTS birthTime = IVLTS.iVLTSBuilder().build();
-    birthTime.setValue(attributes.getBirthTime());
+    birthTime.setValue(attributes.getBirthDate());
     return singletonList(birthTime);
   }
 
