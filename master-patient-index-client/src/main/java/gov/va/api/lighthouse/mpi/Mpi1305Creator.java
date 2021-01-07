@@ -58,7 +58,7 @@ public class Mpi1305Creator {
 
   MpiConfig config;
 
-  Mpi1305ParameterListAttributes attributes;
+  Mpi1305RequestAttributes attributes;
 
   JAXBElement<MCCIMT000100UV01Agent> asAgent() {
     return new JAXBElement<>(
@@ -112,7 +112,8 @@ public class Mpi1305Creator {
 
   private List<IVLTS> birthTime() {
     IVLTS birthTime = IVLTS.iVLTSBuilder().build();
-    birthTime.setValue(attributes.getBirthDate());
+    DateTimeFormatter dateFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+    birthTime.setValue(dateFormat.format(attributes.getBirthTime()));
     return singletonList(birthTime);
   }
 
@@ -199,12 +200,14 @@ public class Mpi1305Creator {
 
   private List<Serializable> nameList() {
     List<Serializable> nameList = new ArrayList<>();
-    nameList.add(
-        new JAXBElement<>(
-            new QName("urn:hl7-org:v3", "given"),
-            String.class,
-            EN.class,
-            attributes.getFirstName()));
+    if (StringUtils.isNotBlank(attributes.getFirstName())) {
+      nameList.add(
+          new JAXBElement<>(
+              new QName("urn:hl7-org:v3", "given"),
+              String.class,
+              EN.class,
+              attributes.getFirstName()));
+    }
     // Only add second 'given' if it has a value
     if (StringUtils.isNotBlank(attributes.getMiddleName())) {
       nameList.add(
@@ -214,12 +217,14 @@ public class Mpi1305Creator {
               EN.class,
               attributes.getMiddleName()));
     }
-    nameList.add(
-        new JAXBElement<>(
-            new QName("urn:hl7-org:v3", "family"),
-            String.class,
-            EN.class,
-            attributes.getLastName()));
+    if (StringUtils.isNotBlank(attributes.getLastName())) {
+      nameList.add(
+          new JAXBElement<>(
+              new QName("urn:hl7-org:v3", "family"),
+              String.class,
+              EN.class,
+              attributes.getLastName()));
+    }
     return nameList;
   }
 
@@ -227,23 +232,27 @@ public class Mpi1305Creator {
     PRPAMT201306UV02ParameterList.PRPAMT201306UV02ParameterListBuilder paramBuilder =
         PRPAMT201306UV02ParameterList.builder();
     if (attributes != null) {
-      paramBuilder.livingSubjectId(
-          singletonList(
-              PRPAMT201306UV02LivingSubjectId.builder()
-                  .value(
-                      singletonList(
-                          II.iIBuilder()
-                              .root("2.16.840.1.113883.4.1")
-                              .extension(attributes.getSsn())
-                              .build()))
-                  .semanticsText(stWithContent("SSN"))
-                  .build()));
-      paramBuilder.livingSubjectBirthTime(
-          singletonList(
-              PRPAMT201306UV02LivingSubjectBirthTime.builder()
-                  .value(birthTime())
-                  .semanticsText(stWithContent("LivingSubject.birthTime"))
-                  .build()));
+      if (attributes.getSsn() != null) {
+        paramBuilder.livingSubjectId(
+            singletonList(
+                PRPAMT201306UV02LivingSubjectId.builder()
+                    .value(
+                        singletonList(
+                            II.iIBuilder()
+                                .root("2.16.840.1.113883.4.1")
+                                .extension(attributes.getSsn())
+                                .build()))
+                    .semanticsText(stWithContent("SSN"))
+                    .build()));
+      }
+      if (attributes.getBirthTime() != null) {
+        paramBuilder.livingSubjectBirthTime(
+            singletonList(
+                PRPAMT201306UV02LivingSubjectBirthTime.builder()
+                    .value(birthTime())
+                    .semanticsText(stWithContent("LivingSubject.birthTime"))
+                    .build()));
+      }
       paramBuilder.livingSubjectName(
           singletonList(
               PRPAMT201306UV02LivingSubjectName.builder()
