@@ -1,6 +1,6 @@
 package gov.va.api.lighthouse.mpi;
 
-import java.time.LocalDate;
+import java.time.temporal.Temporal;
 import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
@@ -14,5 +14,5 @@ public class Mpi1305RequestAttributes {
   String firstName;
   String middleName;
   String lastName;
-  LocalDate birthTime;
+  Temporal birthTime;
 }
