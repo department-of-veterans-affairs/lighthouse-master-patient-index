@@ -2,9 +2,12 @@ package gov.va.api.lighthouse.mpi;
 
 import gov.va.oit.oed.vaww.VAIdM;
 import gov.va.oit.oed.vaww.VAIdMPort;
+import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.Socket;
 import java.net.URL;
+import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.Principal;
 import java.security.PrivateKey;
@@ -13,11 +16,13 @@ import java.security.cert.X509Certificate;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManagerFactory;
 import javax.net.ssl.X509KeyManager;
 import javax.xml.ws.BindingProvider;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 import org.hl7.v3.PRPAIN201305UV02;
 import org.hl7.v3.PRPAIN201306UV02;
 import org.hl7.v3.PRPAIN201309UV02;
@@ -25,6 +30,7 @@ import org.hl7.v3.PRPAIN201310UV02;
 import org.springframework.util.ResourceUtils;
 
 @Getter
+@Slf4j
 public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
   private final SSLContext sslContext;
 
@@ -105,19 +111,26 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
           trustManagerFactory.getTrustManagers(),
           new SecureRandom());
       return sslContext;
+    } catch (IOException | GeneralSecurityException e) {
+      log.error("Failed to create SSL context", e);
+      throw e;
     }
   }
 
   @SneakyThrows
   private VAIdMPort port() {
-    VAIdMPort port = new VAIdM(new URL(config.getWsdlLocation())).getVAIdMPort();
-    BindingProvider bp = (BindingProvider) port;
-    bp.getRequestContext()
-        .put(
-            com.sun.xml.ws.developer.JAXWSProperties.SSL_SOCKET_FACTORY,
-            sslContext().getSocketFactory());
-    bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, config.getUrl());
-    return port;
+    SSLSocketFactory socketFactory = sslContext().getSocketFactory();
+    try {
+      VAIdMPort port = new VAIdM(new URL(config.getWsdlLocation())).getVAIdMPort();
+      BindingProvider bp = (BindingProvider) port;
+      bp.getRequestContext()
+          .put(com.sun.xml.ws.developer.JAXWSProperties.SSL_SOCKET_FACTORY, socketFactory);
+      bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, config.getUrl());
+      return port;
+    } catch (MalformedURLException e) {
+      log.error("Failed to create port", e);
+      throw e;
+    }
   }
 
   /** Make a 1305 request. */
