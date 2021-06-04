@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.NonNull;
 import lombok.Value;
 
+/** Patient Identifier Segment. */
 @Value
 @Builder
 public class PatientIdentifierSegment {

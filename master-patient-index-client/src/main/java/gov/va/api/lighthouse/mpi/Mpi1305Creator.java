@@ -47,6 +47,7 @@ import org.hl7.v3.QUQIMT021001UV01DataEnterer;
 import org.hl7.v3.TS;
 import org.hl7.v3.XActMoodIntentEvent;
 
+/** 1305 request object creator. */
 @Value
 @Builder
 public class Mpi1305Creator {

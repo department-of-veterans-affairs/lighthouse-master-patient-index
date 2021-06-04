@@ -8,6 +8,7 @@ import lombok.Builder;
 import org.hl7.v3.II;
 import org.hl7.v3.PRPAIN201306UV02;
 
+/** Patient ID Transformer. */
 @Builder
 public class PatientIdTransformer {
   PRPAIN201306UV02 mpi;

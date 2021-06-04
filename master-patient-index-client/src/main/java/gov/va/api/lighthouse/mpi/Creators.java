@@ -6,6 +6,7 @@ import org.hl7.v3.CS;
 import org.hl7.v3.ST;
 import org.hl7.v3.TEL;
 
+/** Utility class of methods used by request object creators. */
 @UtilityClass
 public final class Creators {
   /** Return a CE with the given code or null if code is null. */

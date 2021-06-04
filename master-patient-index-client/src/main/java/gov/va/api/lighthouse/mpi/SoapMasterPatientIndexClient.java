@@ -30,6 +30,7 @@ import org.hl7.v3.PRPAIN201309UV02;
 import org.hl7.v3.PRPAIN201310UV02;
 import org.springframework.util.ResourceUtils;
 
+/** Master Patient Index service SOAP client. */
 @Getter
 @Slf4j
 public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
