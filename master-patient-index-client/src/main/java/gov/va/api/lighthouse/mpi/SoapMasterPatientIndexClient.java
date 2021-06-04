@@ -138,11 +138,19 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
     }
   }
 
-  /** Make a 1305 request. */
+  /** Make a 1305 request by attributes. */
   @Override
   public PRPAIN201306UV02 request1305ByAttributes(Mpi1305RequestAttributes attributes) {
     PRPAIN201305UV02 mvi1305RequestBody =
         Mpi1305Creator.builder().config(config).attributes(attributes).build().asSoapRequest();
+    return port().prpaIN201305UV02(mvi1305RequestBody);
+  }
+
+  /** Make a 1305 request by ICN. */
+  @Override
+  public PRPAIN201306UV02 request1305ByIcn(String icn) {
+    PRPAIN201305UV02 mvi1305RequestBody =
+        Mpi1305Creator.builder().config(config).icn(icn).build().asSoapRequest();
     return port().prpaIN201305UV02(mvi1305RequestBody);
   }
 

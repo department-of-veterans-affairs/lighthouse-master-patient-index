@@ -60,6 +60,8 @@ public class Mpi1305Creator {
 
   Mpi1305RequestAttributes attributes;
 
+  String icn;
+
   JAXBElement<MCCIMT000100UV01Agent> asAgent() {
     return new JAXBElement<>(
         new QName("urn:hl7-org:v3", "asAgent"),
@@ -268,6 +270,10 @@ public class Mpi1305Creator {
                     .semanticsText(stWithContent("LivingSubject.administrativeGender"))
                     .build()));
       }
+    }
+
+    if (icn != null) {
+      paramBuilder.id(II.iIBuilder().root("2.16.840.1.113883.4.349").extension(icn).build());
     }
     return paramBuilder.build();
   }
