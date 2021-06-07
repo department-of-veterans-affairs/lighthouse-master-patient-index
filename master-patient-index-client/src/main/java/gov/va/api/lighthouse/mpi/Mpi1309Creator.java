@@ -36,6 +36,7 @@ import org.hl7.v3.ST;
 import org.hl7.v3.TS;
 import org.hl7.v3.XActMoodIntentEvent;
 
+/** 1309 request object creator. */
 @Value
 @Builder
 public class Mpi1309Creator {

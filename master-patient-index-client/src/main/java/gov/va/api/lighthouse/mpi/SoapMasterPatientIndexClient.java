@@ -30,6 +30,7 @@ import org.hl7.v3.PRPAIN201309UV02;
 import org.hl7.v3.PRPAIN201310UV02;
 import org.springframework.util.ResourceUtils;
 
+/** Master Patient Index service SOAP client. */
 @Getter
 @Slf4j
 public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
@@ -138,11 +139,19 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
     }
   }
 
-  /** Make a 1305 request. */
+  /** Make a 1305 request by attributes. */
   @Override
   public PRPAIN201306UV02 request1305ByAttributes(Mpi1305RequestAttributes attributes) {
     PRPAIN201305UV02 mvi1305RequestBody =
         Mpi1305Creator.builder().config(config).attributes(attributes).build().asSoapRequest();
+    return port().prpaIN201305UV02(mvi1305RequestBody);
+  }
+
+  /** Make a 1305 request by ICN. */
+  @Override
+  public PRPAIN201306UV02 request1305ByIcn(String icn) {
+    PRPAIN201305UV02 mvi1305RequestBody =
+        Mpi1305Creator.builder().config(config).icn(icn).build().asSoapRequest();
     return port().prpaIN201305UV02(mvi1305RequestBody);
   }
 

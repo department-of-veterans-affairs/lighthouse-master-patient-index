@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.experimental.Accessors;
 
+/** 1305 request by attributes request body model. */
 @Value
 @Builder
 @Accessors(fluent = false)
