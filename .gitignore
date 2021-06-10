@@ -1,6 +1,10 @@
 */target/
 !.mvn/wrapper/maven-wrapper.jar
 
+*.cert
+*.keystore
+*.truststore
+
 # Have stuff you don't want to commit but still find useful to hang around locally?
 */.private/
 
