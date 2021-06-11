@@ -28,11 +28,6 @@
       <artifactId>jaxws-rt</artifactId>
       <version>${jaxws-rt.version}</version>
     </dependency>
-    <dependency>
-      <groupId>gov.va.api.health</groupId>
-      <artifactId>service-auto-config</artifactId>
-      <version>${project.parent.version}</version>
-    </dependency>
   </dependencies>
   <build>
     <plugins>
