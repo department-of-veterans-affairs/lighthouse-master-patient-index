@@ -21,6 +21,7 @@ import org.springframework.context.annotation.Configuration;
 public class MpiConfig {
   String url;
   String wsdlLocation;
+  @Builder.Default boolean sslEnabled = true;
   String keystorePath;
   String keystorePassword;
   String keyAlias;

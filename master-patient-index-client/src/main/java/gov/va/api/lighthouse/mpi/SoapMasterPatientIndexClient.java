@@ -14,6 +14,7 @@ import java.security.Principal;
 import java.security.PrivateKey;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
+import java.util.Optional;
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import javax.net.ssl.SSLContext;
@@ -34,7 +35,7 @@ import org.springframework.util.ResourceUtils;
 @Getter
 @Slf4j
 public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
-  private final SSLContext sslContext;
+  private final Optional<SSLContext> sslContext;
 
   private final MpiConfig config;
 
@@ -47,7 +48,10 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
      * integration testing, this is deferred.
      * Today is Dec 11, 2020.
      */
-    javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(sslContext.getSocketFactory());
+    sslContext.ifPresent(
+        context ->
+            javax.net.ssl.HttpsURLConnection.setDefaultSSLSocketFactory(
+                context.getSocketFactory()));
   }
 
   public static SoapMasterPatientIndexClient of(MpiConfig config) {
@@ -56,7 +60,10 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
 
   /** Configure SSL for SOAP communication with MPI. */
   @SneakyThrows
-  private SSLContext createSslContext() {
+  private Optional<SSLContext> createSslContext() {
+    if (!config.isSslEnabled()) {
+      return Optional.empty();
+    }
     try (InputStream keystoreInputStream =
             ResourceUtils.getURL(config.getKeystorePath()).openStream();
         InputStream truststoreInputStream =
@@ -112,7 +119,7 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
           new KeyManager[] {keyManager},
           trustManagerFactory.getTrustManagers(),
           new SecureRandom());
-      return sslContext;
+      return Optional.of(sslContext);
     } catch (IOException | GeneralSecurityException e) {
       log.error("Failed to create SSL context", e);
       throw e;
@@ -121,12 +128,14 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
 
   @SneakyThrows
   private VAIdMPort port() {
-    SSLSocketFactory socketFactory = sslContext().getSocketFactory();
     try {
       VAIdMPort port = new VAIdM(new URL(config.getWsdlLocation())).getVAIdMPort();
       BindingProvider bp = (BindingProvider) port;
-      bp.getRequestContext()
-          .put(com.sun.xml.ws.developer.JAXWSProperties.SSL_SOCKET_FACTORY, socketFactory);
+      if (sslContext().isPresent()) {
+        SSLSocketFactory socketFactory = sslContext().get().getSocketFactory();
+        bp.getRequestContext()
+            .put(com.sun.xml.ws.developer.JAXWSProperties.SSL_SOCKET_FACTORY, socketFactory);
+      }
       bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, config.getUrl());
       return port;
     } catch (InaccessibleWSDLException e) {
