@@ -5,8 +5,8 @@ import static gov.va.api.lighthouse.mpi.Creators.csWithCode;
 import static gov.va.api.lighthouse.mpi.Creators.stWithContent;
 import static gov.va.api.lighthouse.mpi.Creators.telWithValue;
 import static java.util.Collections.singletonList;
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
 
-import io.micrometer.core.instrument.util.StringUtils;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.time.LocalDateTime;
@@ -203,7 +203,7 @@ public class Mpi1305Creator {
 
   private List<Serializable> nameList() {
     List<Serializable> nameList = new ArrayList<>();
-    if (StringUtils.isNotBlank(attributes.getFirstName())) {
+    if (isNotBlank(attributes.getFirstName())) {
       nameList.add(
           new JAXBElement<>(
               new QName("urn:hl7-org:v3", "given"),
@@ -212,7 +212,7 @@ public class Mpi1305Creator {
               attributes.getFirstName()));
     }
     // Only add second 'given' if it has a value
-    if (StringUtils.isNotBlank(attributes.getMiddleName())) {
+    if (isNotBlank(attributes.getMiddleName())) {
       nameList.add(
           new JAXBElement<>(
               new QName("urn:hl7-org:v3", "given"),
@@ -220,7 +220,7 @@ public class Mpi1305Creator {
               EN.class,
               attributes.getMiddleName()));
     }
-    if (StringUtils.isNotBlank(attributes.getLastName())) {
+    if (isNotBlank(attributes.getLastName())) {
       nameList.add(
           new JAXBElement<>(
               new QName("urn:hl7-org:v3", "family"),
@@ -263,7 +263,7 @@ public class Mpi1305Creator {
                       singletonList(
                           EN.eNBuilder().use(singletonList("L")).content(nameList()).build()))
                   .build()));
-      if (StringUtils.isNotBlank(attributes.getGender())) {
+      if (isNotBlank(attributes.getGender())) {
         paramBuilder.livingSubjectAdministrativeGender(
             singletonList(
                 PRPAMT201306UV02LivingSubjectAdministrativeGender.builder()
