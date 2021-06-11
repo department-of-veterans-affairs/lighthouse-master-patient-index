@@ -47,6 +47,7 @@ import org.hl7.v3.QUQIMT021001UV01DataEnterer;
 import org.hl7.v3.TS;
 import org.hl7.v3.XActMoodIntentEvent;
 
+/** 1305 request object creator. */
 @Value
 @Builder
 public class Mpi1305Creator {
@@ -59,6 +60,8 @@ public class Mpi1305Creator {
   MpiConfig config;
 
   Mpi1305RequestAttributes attributes;
+
+  String icn;
 
   JAXBElement<MCCIMT000100UV01Agent> asAgent() {
     return new JAXBElement<>(
@@ -268,6 +271,10 @@ public class Mpi1305Creator {
                     .semanticsText(stWithContent("LivingSubject.administrativeGender"))
                     .build()));
       }
+    }
+
+    if (icn != null) {
+      paramBuilder.id(II.iIBuilder().root("2.16.840.1.113883.4.349").extension(icn).build());
     }
     return paramBuilder.build();
   }
