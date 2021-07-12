@@ -136,6 +136,18 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
         bp.getRequestContext()
             .put(com.sun.xml.ws.developer.JAXWSProperties.SSL_SOCKET_FACTORY, socketFactory);
       }
+      if (config().getConnectionTimeout() != null) {
+        bp.getRequestContext()
+            .put(
+                com.sun.xml.ws.developer.JAXWSProperties.CONNECT_TIMEOUT,
+                config().getConnectionTimeout());
+      }
+      if (config().getReadTimeout() != null) {
+        bp.getRequestContext()
+            .put(
+                com.sun.xml.ws.developer.JAXWSProperties.REQUEST_TIMEOUT,
+                config().getReadTimeout());
+      }
       bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, config.getUrl());
       return port;
     } catch (InaccessibleWSDLException e) {
