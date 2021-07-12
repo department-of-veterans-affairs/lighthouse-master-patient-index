@@ -22,8 +22,8 @@ public class MpiConfig {
   String url;
   String wsdlLocation;
   @Builder.Default boolean sslEnabled = true;
-  String connectionTimeout;
-  String readTimeout;
+  Integer connectionTimeout;
+  Integer readTimeout;
   String keystorePath;
   String keystorePassword;
   String keyAlias;
