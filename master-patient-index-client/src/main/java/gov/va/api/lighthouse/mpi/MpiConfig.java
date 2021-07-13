@@ -1,5 +1,6 @@
 package gov.va.api.lighthouse.mpi;
 
+import java.time.Duration;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -22,8 +23,8 @@ public class MpiConfig {
   String url;
   String wsdlLocation;
   @Builder.Default boolean sslEnabled = true;
-  Integer connectionTimeout;
-  Integer readTimeout;
+  Duration connectionTimeout;
+  Duration readTimeout;
   String keystorePath;
   String keystorePassword;
   String keyAlias;

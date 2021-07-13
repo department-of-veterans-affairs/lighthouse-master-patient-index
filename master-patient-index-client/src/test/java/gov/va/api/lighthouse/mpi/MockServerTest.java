@@ -8,6 +8,8 @@ import static org.mockserver.model.RegexBody.regex;
 
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.time.Duration;
+import java.time.temporal.ChronoUnit;
 import java.util.concurrent.TimeUnit;
 import javax.xml.ws.WebServiceException;
 import lombok.SneakyThrows;
@@ -79,8 +81,8 @@ public class MockServerTest {
             .userId("LIGHTHOUSE")
             .integrationProcessId("666LHSE")
             .asAgentId("666LHSG")
-            .connectionTimeout(5)
-            .readTimeout(10)
+            .connectionTimeout(Duration.of(5L, ChronoUnit.SECONDS))
+            .readTimeout(Duration.of(10L, ChronoUnit.SECONDS))
             .build();
     var result = SoapMasterPatientIndexClient.of(config).request1309ByIcn("1010101010V666666");
     assertThat(result).isNotNull();
@@ -96,8 +98,8 @@ public class MockServerTest {
             .userId("LIGHTHOUSE")
             .integrationProcessId("666LHSE")
             .asAgentId("666LHSG")
-            .connectionTimeout(1)
-            .readTimeout(3)
+            .connectionTimeout(Duration.of(1L, ChronoUnit.SECONDS))
+            .readTimeout(Duration.of(3L, ChronoUnit.SECONDS))
             .build();
     // javax.xml.ws.WebServiceException: java.net.SocketTimeoutException: Read timed out
     assertThatExceptionOfType(WebServiceException.class)
