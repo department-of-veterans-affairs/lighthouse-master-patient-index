@@ -50,7 +50,7 @@ public class MockServerTest {
                 .withBody(regex(".*1010101010V666666.*")))
         .respond(
             response()
-                .withDelay(TimeUnit.SECONDS, 3)
+                .withDelay(TimeUnit.SECONDS, 1)
                 .withStatusCode(200)
                 .withBody(
                     """
@@ -98,8 +98,8 @@ public class MockServerTest {
             .userId("LIGHTHOUSE")
             .integrationProcessId("666LHSE")
             .asAgentId("666LHSG")
-            .connectionTimeout(Duration.of(1L, ChronoUnit.SECONDS))
-            .readTimeout(Duration.of(3L, ChronoUnit.SECONDS))
+            .connectionTimeout(Duration.of(500L, ChronoUnit.MILLIS))
+            .readTimeout(Duration.of(1L, ChronoUnit.SECONDS))
             .build();
     // javax.xml.ws.WebServiceException: java.net.SocketTimeoutException: Read timed out
     assertThatExceptionOfType(WebServiceException.class)
