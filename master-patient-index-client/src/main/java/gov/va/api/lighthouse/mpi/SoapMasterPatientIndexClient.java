@@ -140,13 +140,13 @@ public class SoapMasterPatientIndexClient implements MasterPatientIndexClient {
         bp.getRequestContext()
             .put(
                 com.sun.xml.ws.developer.JAXWSProperties.CONNECT_TIMEOUT,
-                config().getConnectionTimeout());
+                (int) config().getConnectionTimeout().toMillis());
       }
       if (config().getReadTimeout() != null) {
         bp.getRequestContext()
             .put(
                 com.sun.xml.ws.developer.JAXWSProperties.REQUEST_TIMEOUT,
-                config().getReadTimeout());
+                (int) config().getReadTimeout().toMillis());
       }
       bp.getRequestContext().put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, config.getUrl());
       return port;
